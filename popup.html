@@ -1,0 +1,899 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GreenPrompt Settings</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* IMPORTANT: This makes the popup actually rounded */
+      html,
+      body {
+        width: 400px;
+        min-height: 300px;
+        border-radius: 22px;
+        overflow: hidden;
+        background: transparent;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      /* Wrapper to force rounded clipping */
+      .popup-wrapper {
+        width: 400px;
+        min-height: 300px;
+        border-radius: 22px;
+        overflow: hidden;
+        background: #f5f5f5;
+        color: #333;
+      }
+
+      .header {
+        background: white;
+        padding: 24px;
+        text-align: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .header-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .header-logo img {
+        width: 240px;
+        height: auto;
+      }
+
+      .header p {
+        font-size: 14px;
+        color: #6b7280;
+        margin-top: 12px;
+      }
+
+      .gp-level-value {
+        font-size: 20px;
+        font-weight: bold;
+        color: #222;
+      }
+
+      .gp-level-subtitle {
+        font-size: 9px;
+        font-weight: 400;
+        color: #666;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .stat-card {
+        background: white;
+        padding: 16px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-value {
+        font-size: 22px;
+        font-weight: 700;
+        color: #10b981;
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      .stat-label {
+        font-size: 11px;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .section {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 24px;
+        margin-bottom: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .section h2 {
+        font-size: 16px;
+        margin-bottom: 16px;
+        color: #1f2937;
+      }
+
+      .about-text {
+        font-size: 14px;
+        color: #666;
+        line-height: 1.5;
+      }
+
+      .about-text + .about-text {
+        margin-top: 12px;
+      }
+
+      .footer {
+        background: white;
+        padding: 16px 20px;
+        text-align: center;
+        font-size: 12px;
+        color: #6b7280;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      .footer a {
+        color: #555;
+        text-decoration: none;
+      }
+
+      #onboarding-screen {
+        display: none;
+        padding: 24px 20px;
+        background: white;
+      }
+
+      .onboarding-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #10b981;
+        text-align: center;
+      }
+
+      .onboarding-subtitle {
+        margin-top: 8px;
+        font-size: 14px;
+        color: #6b7280;
+        text-align: center;
+      }
+
+      .uuid-input-section {
+        margin-top: 18px;
+        background: #f3f4f6;
+        border-radius: 12px;
+        padding: 14px;
+      }
+
+      .uuid-input-section label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 8px;
+      }
+
+      .uuid-input-section input {
+        width: 100%;
+        border: 2px solid #d1d5db;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 15px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        letter-spacing: 0.4px;
+      }
+
+      .uuid-input-section input:focus {
+        outline: none;
+        border-color: #10b981;
+      }
+
+      .help-text {
+        margin-top: 8px;
+        font-size: 12px;
+        color: #6b7280;
+      }
+
+      .error-message {
+        display: none;
+        margin-top: 10px;
+        font-size: 12px;
+        color: #991b1b;
+        background: #fee2e2;
+        border-radius: 8px;
+        padding: 8px 10px;
+      }
+
+      .submit-btn {
+        margin-top: 14px;
+        width: 100%;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 14px;
+        font-size: 15px;
+        font-weight: 600;
+        color: white;
+        background: #10b981;
+        cursor: pointer;
+      }
+
+      .submit-btn:hover {
+        background: #059669;
+      }
+
+      .submit-btn:disabled {
+        opacity: 0.75;
+        cursor: not-allowed;
+      }
+
+      .support-text {
+        margin-top: 12px;
+        font-size: 11px;
+        line-height: 1.45;
+        color: #6b7280;
+        text-align: center;
+      }
+
+      #main-dashboard {
+        display: none;
+      }
+
+      .participant-pill {
+        display: inline-block;
+        margin-top: 8px;
+        border-radius: 999px;
+        background: #ecfdf5;
+        color: #065f46;
+        font-size: 11px;
+        padding: 5px 10px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+
+      .prompt-logging-preferences {
+        margin-top: 10px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        text-align: left;
+      }
+
+      .prompt-logging-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .prompt-logging-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: #374151;
+        font-weight: 600;
+      }
+
+      .prompt-logging-help-wrap {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .prompt-logging-help-btn {
+        display: inline-flex;
+        width: 16px;
+        height: 16px;
+        border-radius: 999px;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        background: #e5e7eb;
+        color: #374151;
+        border: 1px solid #cbd5e1;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+      }
+
+      .prompt-logging-help-btn:hover {
+        background: #dbeafe;
+        color: #1d4ed8;
+      }
+
+      .prompt-logging-help-btn:focus-visible {
+        outline: 2px solid #2563eb;
+        outline-offset: 2px;
+      }
+
+      .prompt-logging-tooltip {
+        position: absolute;
+        top: 24px;
+        left: 0;
+        width: 250px;
+        z-index: 10;
+        background: #111827;
+        color: #f9fafb;
+        border-radius: 8px;
+        padding: 8px 10px;
+        font-size: 11px;
+        line-height: 1.45;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-4px);
+        transition:
+          opacity 0.15s ease,
+          transform 0.15s ease,
+          visibility 0.15s ease;
+      }
+
+      .prompt-logging-help-wrap:hover .prompt-logging-tooltip,
+      .prompt-logging-help-wrap:focus-within .prompt-logging-tooltip,
+      .prompt-logging-help-wrap.is-open .prompt-logging-tooltip {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .prompt-logging-status {
+        margin-top: 6px;
+        font-size: 11px;
+        color: #6b7280;
+        line-height: 1.4;
+      }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 42px;
+        height: 24px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #d1d5db;
+        transition: 0.2s;
+        border-radius: 999px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.2s;
+        border-radius: 50%;
+      }
+
+      .switch input:checked + .slider {
+        background-color: #10b981;
+      }
+
+      .switch input:checked + .slider:before {
+        transform: translateX(18px);
+      }
+
+      .followup-actions {
+        display: none;
+        margin: 10px 20px 0;
+        background: white;
+        border-radius: 12px;
+        padding: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .followup-actions-title {
+        font-size: 12px;
+        color: #4b5563;
+        margin-bottom: 8px;
+        text-align: center;
+      }
+
+      .followup-actions-row {
+        display: flex;
+        gap: 8px;
+      }
+
+      .followup-btn {
+        flex: 1;
+        border: none;
+        border-radius: 8px;
+        padding: 9px 8px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        background: #10b981;
+        color: white;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .followup-btn:hover {
+        background: #059669;
+      }
+
+      .followup-btn.followup-btn-completed {
+        background: #d1fae5;
+        color: #065f46;
+        cursor: pointer;
+        border: 1px solid #86efac;
+      }
+
+      .logging-actions {
+        display: none;
+        margin: 10px 20px 0;
+        background: white;
+        border-radius: 12px;
+        padding: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .logging-actions-title {
+        font-size: 12px;
+        color: #4b5563;
+        margin-bottom: 8px;
+        text-align: center;
+      }
+
+      .logging-actions-row {
+        display: flex;
+        gap: 8px;
+      }
+
+      .logging-btn {
+        flex: 1;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        background: #f9fafb;
+        color: #1f2937;
+      }
+
+      .logging-btn:hover {
+        background: #f3f4f6;
+      }
+
+      .logging-status {
+        margin-top: 8px;
+        font-size: 11px;
+        color: #6b7280;
+        text-align: center;
+        line-height: 1.4;
+      }
+
+      .upload-debug {
+        display: none;
+        margin: 10px 20px 0;
+        background: white;
+        border-radius: 12px;
+        padding: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .upload-debug-title {
+        font-size: 12px;
+        color: #4b5563;
+        margin-bottom: 8px;
+        text-align: center;
+      }
+
+      .upload-debug-row {
+        display: flex;
+        gap: 8px;
+      }
+
+      .upload-debug-row + .upload-debug-row {
+        margin-top: 8px;
+      }
+
+      .upload-debug-btn {
+        flex: 1;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        background: #f9fafb;
+        color: #1f2937;
+      }
+
+      .upload-debug-btn:hover {
+        background: #f3f4f6;
+      }
+
+      .upload-debug-status {
+        margin-top: 8px;
+        font-size: 11px;
+        color: #6b7280;
+        text-align: center;
+        line-height: 1.4;
+        white-space: pre-wrap;
+      }
+
+      .god-mode-panel {
+        margin-top: 10px;
+        border-top: 1px solid #e5e7eb;
+        padding-top: 10px;
+      }
+
+      .god-mode-title {
+        font-size: 12px;
+        font-weight: 700;
+        color: #374151;
+        margin-bottom: 8px;
+        text-align: center;
+      }
+
+      .god-mode-input,
+      .god-mode-textarea {
+        width: 100%;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 8px;
+        font-size: 12px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        background: #f9fafb;
+        color: #111827;
+      }
+
+      .god-mode-textarea {
+        min-height: 130px;
+        resize: vertical;
+      }
+
+      .god-mode-status {
+        margin-top: 8px;
+        font-size: 11px;
+        color: #6b7280;
+        text-align: center;
+        line-height: 1.4;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="popup-wrapper">
+      <div id="onboarding-screen">
+        <div class="onboarding-title">GreenPrompt</div>
+        <p class="onboarding-subtitle">
+          Bitte gib deine Teilnehmer-ID ein, um die Studie zu starten.
+        </p>
+
+        <div class="uuid-input-section">
+          <label for="uuid-input">Teilnehmer-ID</label>
+          <input
+            type="text"
+            id="uuid-input"
+            placeholder="z. B. a3f5-8d2c-9e1b-4f7a"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <div class="help-text">
+            Erlaubte Formate: 4x4 oder UUID-v4 mit Bindestrichen.
+          </div>
+          <div class="error-message" id="uuid-error">
+            Ungueltige Teilnehmer-ID. Bitte Eingabe pruefen.
+          </div>
+        </div>
+
+        <button class="submit-btn" id="submit-uuid" type="button">
+          Studie starten
+        </button>
+
+        <p class="support-text">
+          Du findest die ID im Baseline-Fragebogen. Falls du sie verloren hast,
+          kontaktiere bitte die Studienleitung.
+        </p>
+      </div>
+
+      <div id="main-dashboard">
+        <div class="header">
+          <div class="header-logo">
+            <img
+              src="assets/logo/greenprompt-logo.png"
+              alt="GreenPrompt Logo"
+            />
+          </div>
+          <p>Optimize your prompts for efficiency</p>
+          <div class="participant-pill" id="displayParticipantUuid">
+            participant: not set
+          </div>
+
+          <div
+            class="prompt-logging-preferences"
+            id="prompt-logging-preferences"
+          >
+            <div class="prompt-logging-row">
+              <div class="prompt-logging-label">
+                Prompt text logging
+                <span
+                  class="prompt-logging-help-wrap"
+                  id="prompt-logging-help-wrap"
+                >
+                  <button
+                    type="button"
+                    class="prompt-logging-help-btn"
+                    id="prompt-logging-help-btn"
+                    aria-label="Prompt text logging explanation"
+                    aria-expanded="false"
+                    aria-controls="prompt-logging-tooltip"
+                  >
+                    ?
+                  </button>
+                  <div
+                    class="prompt-logging-tooltip"
+                    id="prompt-logging-tooltip"
+                    role="tooltip"
+                  >
+                    By default, your chats are not shared with us. However,
+                    sharing them does help us understand how the Green Prompter
+                    is being used. While we cannot trace individual users, we do
+                    gain insights from the text and its context. If you're
+                    willing to share your chats, you can enable this here.
+                  </div>
+                </span>
+              </div>
+              <label class="switch" for="prompt-text-logging-toggle">
+                <input
+                  type="checkbox"
+                  id="prompt-text-logging-toggle"
+                  aria-label="Enable prompt text logging"
+                />
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div class="prompt-logging-status" id="prompt-text-logging-status">
+              Off: prompt text is not collected.
+            </div>
+          </div>
+        </div>
+
+        <div class="followup-actions" id="followup-actions">
+          <div class="followup-actions-title">Follow-up Frageboegen</div>
+          <div class="followup-actions-row">
+            <button class="followup-btn" id="followup-t1-btn" type="button">
+              Tag-1 Fragebogen
+            </button>
+            <button class="followup-btn" id="followup-t5-btn" type="button">
+              Abschlussfragebogen
+            </button>
+          </div>
+        </div>
+
+        <div class="logging-actions" id="logging-actions-container">
+          <div class="logging-actions-title">Lokaler Datenexport</div>
+          <div class="logging-actions-row">
+            <button class="logging-btn" id="export-jsonl-btn" type="button">
+              JSONL Export
+            </button>
+            <button class="logging-btn" id="export-csv-btn" type="button">
+              CSV Export
+            </button>
+          </div>
+          <div class="logging-actions-row">
+            <button
+              class="logging-btn"
+              id="export-sample-snapshot-btn"
+              type="button"
+            >
+              Sample Snapshot Export
+            </button>
+          </div>
+          <div class="logging-status" id="logging-export-status">
+            Export bereit. Keine Daten uebertragen.
+          </div>
+        </div>
+
+        <div class="upload-debug" id="upload-debug-container">
+          <div class="upload-debug-title">Upload Debug</div>
+          <div class="upload-debug-row">
+            <button
+              class="upload-debug-btn"
+              id="upload-debug-refresh-btn"
+              type="button"
+            >
+              Status aktualisieren
+            </button>
+            <button
+              class="upload-debug-btn"
+              id="upload-debug-trigger-btn"
+              type="button"
+            >
+              Upload jetzt starten
+            </button>
+            <button
+              class="upload-debug-btn"
+              id="upload-debug-sosci-trigger-btn"
+              type="button"
+            >
+              SoSci Upload testen
+            </button>
+          </div>
+          <div class="upload-debug-row">
+            <button
+              class="upload-debug-btn"
+              id="upload-debug-sosci-5mb-btn"
+              type="button"
+            >
+              SoSci 5 MB Test
+            </button>
+            <button
+              class="upload-debug-btn"
+              id="upload-debug-sosci-10mb-btn"
+              type="button"
+            >
+              SoSci 10 MB Test
+            </button>
+            <button
+              class="upload-debug-btn"
+              id="upload-debug-sosci-15mb-btn"
+              type="button"
+            >
+              SoSci 15 MB Test
+            </button>
+          </div>
+          <div class="upload-debug-status" id="upload-debug-status">
+            Noch kein Upload-Status geladen.
+          </div>
+
+          <div class="god-mode-panel" id="god-mode-panel">
+            <div class="god-mode-title">God Mode (Stats / Awards)</div>
+            <div class="upload-debug-row">
+              <button
+                class="upload-debug-btn"
+                id="god-mode-load-btn"
+                type="button"
+              >
+                Stats laden
+              </button>
+              <button
+                class="upload-debug-btn"
+                id="god-mode-apply-btn"
+                type="button"
+              >
+                Stats anwenden
+              </button>
+              <button
+                class="upload-debug-btn"
+                id="god-mode-reset-btn"
+                type="button"
+              >
+                Stats reset
+              </button>
+            </div>
+            <div class="upload-debug-row">
+              <textarea
+                id="god-mode-json"
+                class="god-mode-textarea"
+                spellcheck="false"
+                aria-label="God mode stats JSON"
+              ></textarea>
+            </div>
+            <div class="upload-debug-row">
+              <input
+                id="god-mode-award-id"
+                class="god-mode-input"
+                type="text"
+                placeholder="Award ID (z. B. custom_award_1)"
+              />
+            </div>
+            <div class="upload-debug-row">
+              <button
+                class="upload-debug-btn"
+                id="god-mode-award-add-btn"
+                type="button"
+              >
+                Award hinzufuegen
+              </button>
+              <button
+                class="upload-debug-btn"
+                id="god-mode-award-remove-btn"
+                type="button"
+              >
+                Award entfernen
+              </button>
+              <button
+                class="upload-debug-btn"
+                id="god-mode-award-clear-btn"
+                type="button"
+              >
+                Awards leeren
+              </button>
+            </div>
+            <div class="god-mode-status" id="god-mode-status">
+              God Mode bereit.
+            </div>
+          </div>
+        </div>
+
+        <div class="content">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-value" id="totalPrompts">0</span>
+              <span class="stat-label">Total Prompts</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-value" id="optimizedPrompts">0</span>
+              <span class="stat-label">Optimized</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-value" id="wordsSaved">0</span>
+              <span class="stat-label">Words Saved</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-value" id="energySaved">0</span>
+              <span class="stat-label">Energy Saved</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-value" id="co2Saved">0</span>
+              <span class="stat-label">CO2 Saved</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-value" id="waterSaved">0</span>
+              <span class="stat-label">Water Saved</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-value" id="level">1</span>
+              <span class="stat-label">Level</span>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-value" id="currentTree">Apple Tree</span>
+              <span class="stat-label">Current Tree</span>
+            </div>
+          </div>
+
+          <div class="section">
+            <h2>About</h2>
+            <p class="about-text">
+              This extension helps optimize your prompts by removing unnecessary
+              words while preserving meaning.
+            </p>
+            <p class="about-text">
+              When you submit a prompt, you'll see optimization suggestions.
+            </p>
+          </div>
+        </div>
+
+        <div class="footer">
+          <p>Research Study Extension</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="logging.js"></script>
+    <script src="onboarding.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

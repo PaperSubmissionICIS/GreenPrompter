@@ -1,0 +1,51 @@
+{
+  "manifest_version": 3,
+  "name": "GreenPrompt",
+  "version": "1.0.0",
+  "description": "Make your ChatGPT prompts more sustainable through local optimization",
+  "permissions": ["activeTab", "storage", "scripting", "alarms"],
+  "host_permissions": [
+    "*://chat.openai.com/*",
+    "*://chatgpt.com/*",
+    "https://next.hessenbox.de/*",
+    "https://survey.ise.tu-darmstadt.de/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://chat.openai.com/*", "*://chatgpt.com/*"],
+      "js": ["words-data.js", "logging.js", "onboarding.js", "content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "assets/icons/icon16.png",
+      "48": "assets/icons/icon48.png",
+      "128": "assets/icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "nlp-pipeline-core.js",
+        "words-data.js",
+        "assets/logo/greenprompt-logo.png",
+        "assets/trees/*.webp",
+        "assets/score/*.webp",
+        "assets/ui/levelUp.webp",
+        "assets/rewards/reward10.webp"
+      ],
+      "matches": ["*://chat.openai.com/*", "*://chatgpt.com/*"]
+    }
+  ]
+}

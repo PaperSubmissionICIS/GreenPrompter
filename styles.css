@@ -1,0 +1,489 @@
+/**
+ * GreenPrompt Styles
+ * Modern, clean UI with accessibility considerations
+ */
+
+.gp-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: gp-fadeIn 0.2s ease-in-out;
+}
+
+@keyframes gp-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.gp-modal {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 900px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: gp-slideUp 0.3s ease-out;
+}
+
+@keyframes gp-slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.gp-header {
+  padding: 20px 24px;
+  background: #444;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gp-header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gp-header-logo {
+  width: 55px;
+  height: auto;
+}
+
+.gp-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.gp-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.gp-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.gp-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.gp-prompts-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+/* Nudging: Make optimized prompt more prominent */
+.gp-modal.nudging .gp-prompts-container {
+  grid-template-columns: 0.6fr 1.4fr;
+}
+
+.gp-prompt-box {
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  background: #f9fafb;
+  transition: all 0.3s;
+}
+
+.gp-prompt-box h3 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gp-prompt-text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #1f2937;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  min-height: 100px;
+}
+
+.gp-prompt-box.original .gp-prompt-text,
+.gp-prompt-box.optimized .gp-prompt-text,
+.gp-prompt-box.original .gp-diff-text,
+.gp-prompt-box.optimized .gp-diff-text {
+  max-height: 220px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #b8b8b8 transparent;
+}
+
+.gp-prompt-box.original .gp-prompt-text::-webkit-scrollbar,
+.gp-prompt-box.optimized .gp-prompt-text::-webkit-scrollbar,
+.gp-prompt-box.original .gp-diff-text::-webkit-scrollbar,
+.gp-prompt-box.optimized .gp-diff-text::-webkit-scrollbar {
+  width: 8px;
+}
+
+.gp-prompt-box.original .gp-prompt-text::-webkit-scrollbar-track,
+.gp-prompt-box.optimized .gp-prompt-text::-webkit-scrollbar-track,
+.gp-prompt-box.original .gp-diff-text::-webkit-scrollbar-track,
+.gp-prompt-box.optimized .gp-diff-text::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.gp-prompt-box.original .gp-prompt-text::-webkit-scrollbar-thumb,
+.gp-prompt-box.optimized .gp-prompt-text::-webkit-scrollbar-thumb,
+.gp-prompt-box.original .gp-diff-text::-webkit-scrollbar-thumb,
+.gp-prompt-box.optimized .gp-diff-text::-webkit-scrollbar-thumb {
+  background-color: #b8b8b8;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.gp-prompt-box.original .gp-prompt-text::-webkit-scrollbar-thumb:hover,
+.gp-prompt-box.optimized .gp-prompt-text::-webkit-scrollbar-thumb:hover,
+.gp-prompt-box.original .gp-diff-text::-webkit-scrollbar-thumb:hover,
+.gp-prompt-box.optimized .gp-diff-text::-webkit-scrollbar-thumb:hover {
+  background-color: #9f9f9f;
+}
+
+/* Nudging: Highlight optimized prompt */
+.gp-modal.nudging .gp-prompt-box.optimized {
+  border-color: #666;
+  background: #f5f5f5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: scale(1.02);
+}
+
+.gp-prompt-box.optimized h3 {
+  color: #333;
+}
+
+.gp-stats {
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  align-items: center;
+}
+
+.gp-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.gp-stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+}
+
+.gp-stat-label {
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+}
+
+.gp-length-selector {
+  margin-bottom: 20px;
+}
+
+.gp-length-selector label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.gp-length-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.gp-length-btn {
+  padding: 8px 16px;
+  border: 2px solid #e5e7eb;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #374151;
+  transition: all 0.2s;
+}
+
+.gp-length-btn:hover {
+  border-color: #666;
+  background: #f5f5f5;
+}
+
+.gp-length-btn.active {
+  border-color: #666;
+  background: #666;
+  color: white;
+}
+
+/* Nudging: Default selection highlighted */
+.gp-modal.nudging .gp-length-btn[data-length="2"] {
+  border-color: #666;
+  background: #f0f0f0;
+  box-shadow: 0 0 0 3px rgba(100, 100, 100, 0.1);
+}
+
+.gp-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  position: relative;
+}
+
+.gp-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gp-btn-reject {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+/* Nudging: Hide reject button until hover */
+.gp-modal.nudging .gp-btn-reject {
+  position: absolute;
+  left: 0;
+  opacity: 0.3;
+  font-size: 12px;
+  padding: 8px 12px;
+}
+
+.gp-modal.nudging .gp-btn-reject:hover {
+  opacity: 1;
+}
+
+.gp-btn-reject:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.gp-btn-edit {
+  background: #3b82f6;
+  color: white;
+}
+
+.gp-btn-edit:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.gp-btn-accept {
+  background: #555;
+  color: white;
+}
+
+.gp-btn-accept:hover {
+  background: #444;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Nudging: Make accept button more prominent */
+.gp-modal.nudging .gp-btn-accept {
+  padding: 14px 32px;
+  font-size: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* Gamification: Tree feedback */
+.gp-tree-feedback {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.gp-btn:hover .gp-tree-feedback {
+  opacity: 1;
+}
+
+.gp-tree-icon {
+  width: 48px;
+  height: 48px;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
+}
+
+/* Gamification stats display */
+.gp-gamification-stats {
+  background: #555;
+  color: white;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.gp-game-stat {
+  text-align: center;
+}
+
+.gp-game-stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  display: block;
+}
+
+.gp-game-stat-label {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+/* Empty prompt warning */
+.gp-warning {
+  background: #f5f5f5;
+  border: 2px solid #999;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.gp-warning-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* ============================
+   Inline Diff View
+   ============================ */
+
+.gp-diff-container {
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  background: #fafafa;
+}
+
+.gp-diff-container h3 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gp-diff-text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #1f2937;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  min-height: 100px;
+}
+
+.gp-diff-removed {
+  background-color: #fdd;
+  color: #b91c1c;
+  text-decoration: line-through;
+  text-decoration-color: #b91c1c;
+  border-radius: 3px;
+  padding: 1px 2px;
+}
+
+.gp-diff-added {
+  background-color: #d4edda;
+  color: #15803d;
+  text-decoration: underline;
+  text-decoration-style: solid;
+  text-decoration-color: #15803d;
+  border-radius: 3px;
+  padding: 1px 2px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .gp-modal {
+    width: 95%;
+    max-height: 90vh;
+  }
+
+  .gp-prompts-container {
+    grid-template-columns: 1fr;
+  }
+
+  .gp-modal.nudging .gp-prompts-container {
+    grid-template-columns: 1fr;
+  }
+
+  .gp-stats {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .gp-actions {
+    flex-direction: column;
+  }
+
+  .gp-modal.nudging .gp-btn-reject {
+    position: static;
+    opacity: 1;
+  }
+}
